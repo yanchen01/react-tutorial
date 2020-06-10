@@ -1,23 +1,10 @@
 import React, { Component, Children } from 'react';
-import styled from 'styled-components';
 
 import './App.css';
 
-import Person from './Person/Person';
-
-const StyledButton = styled.button`
-	background-color: ${(props) => (props.alt ? 'red' : 'green')};
-	color: white;
-	font: inherit;
-	border: 1px solid blue;
-	padding: 8px;
-	cursor: pointer;
-
-	&:hover {
-		background-color: ${(props) => (props.alt ? 'salmon' : 'lightgreen')};
-		color: black;
-	}
-`;
+import Person from '../components/Persons/Person/Person';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
 	state = {
@@ -72,37 +59,21 @@ class App extends Component {
 
 		if (this.state.showPersons) {
 			persons = (
-				<div>
-					{this.state.persons.map((person, index) => {
-						return (
-							<Person
-								name={person.name}
-								age={person.age}
-								click={() => this.deletePersonHandler(index)}
-								key={person.id}
-								changed={(event) => this.nameChangeHandler(event, person.id)}
-							/>
-						);
-					})}
-				</div>
+				<Persons
+					persons={this.state.persons}
+					clicked={this.deletePersonHandler}
+					changed={this.nameChangeHandler}
+				/>
 			);
-		}
-
-		const classes = [];
-		if (this.state.persons.length <= 2) {
-			classes.push('red');
-		}
-		if (this.state.persons.length <= 1) {
-			classes.push('bold');
 		}
 
 		return (
 			<div className="App">
-				<h1>Hi, I'm a React App</h1>
-				<p className={classes.join(' ')}>This is really working!</p>
-				<StyledButton alt={this.state.showPersons} onClick={this.togglePersonHandler}>
-					Toggle Persons
-				</StyledButton>
+				<Cockpit
+					personsLength={this.state.persons.length}
+					showPersons={this.state.showPersons}
+					clicked={this.togglePersonHandler}
+				/>
 				{persons}
 			</div>
 		);
